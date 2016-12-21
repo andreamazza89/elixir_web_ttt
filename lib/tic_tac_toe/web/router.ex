@@ -1,4 +1,4 @@
-defmodule TicTacToe.Router do
+defmodule TicTacToe.Web.Router do
   use Plug.Router
 
   plug Plug.Logger

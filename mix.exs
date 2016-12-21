@@ -13,7 +13,7 @@ defmodule ElixirWebTtt.Mixfile do
 
   def application do
     [applications: [:logger, :cowboy, :plug],
-     mod: {TicTacToe.WebApp, []}]
+     mod: {TicTacToe.Web.App, []}]
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/helpers"]
