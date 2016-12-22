@@ -24,7 +24,7 @@ defmodule BoardTest do
     test "generates a 3-wide board" do
       assert Board.create_board(3) === create_board([size: 3, x: [], o: []])
     end
-    
+
     test "generates a 4-wide board" do
       assert Board.create_board(4) === create_board([size: 4, x: [], o: []])
     end
@@ -33,7 +33,7 @@ defmodule BoardTest do
 
 
   describe "board size" do
-    
+
     test "defaults to size three" do
       three_board = %Board{}
 
@@ -71,7 +71,7 @@ defmodule BoardTest do
 
   end
 
-  
+
   describe "checking the board status" do
 
     test "knows when it is empty" do
@@ -105,12 +105,12 @@ defmodule BoardTest do
     end
 
     test "a board with a winner is recognised (crosses wins diagonal example)" do
-      board_with_winner = create_board([x: [1,5,9], o: [3,4]])      
+      board_with_winner = create_board([x: [1,5,9], o: [3,4]])
       assert Board.status(board_with_winner) === {:win, :x}
     end
 
     test "a board with a winner is recognised (noughts wins)" do
-      board_with_winner = create_board([x: [4,5], o: [1,2,3]])      
+      board_with_winner = create_board([x: [4,5], o: [1,2,3]])
       assert Board.status(board_with_winner) === {:win, :o}
     end
 

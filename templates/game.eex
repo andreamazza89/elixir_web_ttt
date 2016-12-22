@@ -1,1 +1,26 @@
-Ciao
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Elixir TicTacToe</title>
+  </head>
+
+  <body>
+    <p>It is <%= current_player.mark %>'s turn, please pick a move</p>
+
+    <%= if Enum.at(cells, 0) === :empty do %>
+      <form><button type="submit" formaction="/tictactoe/moves/0"></form>
+    <% end %>
+    <form><button type="submit" formaction="/tictactoe/moves/1"></form>
+    <form><button type="submit" formaction="/tictactoe/moves/2"></form>
+    <form><button type="submit" formaction="/tictactoe/moves/3"></form>
+    <form><button type="submit" formaction="/tictactoe/moves/4"></form>
+    <form><button type="submit" formaction="/tictactoe/moves/5"></form>
+    <form><button type="submit" formaction="/tictactoe/moves/6"></form>
+    <form><button type="submit" formaction="/tictactoe/moves/7"></form>
+    <form><button type="submit" formaction="/tictactoe/moves/8"></form>
+
+  </body>
+
+</html>
