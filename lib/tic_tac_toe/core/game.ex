@@ -24,7 +24,7 @@ defmodule Game do
 
   def make_next_move(game = %Game{}) do
     current_player = get_current_player(game)
-    cell_to_mark = Player.get_next_move(current_player, game) 
+    cell_to_mark = Player.get_next_move(current_player, game)
     Game.mark_cell_for_current_player(game, cell_to_mark)
   end
 

@@ -2,10 +2,15 @@ ExUnit.start()
 
 defmodule TestHelpers do
   use ExUnit.Case
-  import ExUnit.CaptureIO
 
-  def assert_console_output_matches(regex, action) do
-    assert Regex.match?(regex, capture_io(action)) 
+  def move_button(move) do
+    "/tictactoe/moves/#{move}"
+  end
+
+  def create_game_with_human_players(player_one_mark, player_two_mark) do
+    player_one = %Player.Human{mark: player_one_mark}
+    player_two = %Player.Human{mark: player_two_mark}
+    %Game{players: {player_one, player_two}}
   end
 
   def get_cell_at(index, game) do
@@ -13,35 +18,12 @@ defmodule TestHelpers do
     Enum.at(board.cells, index)
   end
 
-  def create_human_player_with_moves([moves: moves, mark: mark, ui: ui]) do
-    moves_stream = create_input_stream(moves)
-    %Player.Human{io: {ui, moves_stream}, mark: mark}
-  end
-
-  def create_human_player_with_moves([moves: moves, mark: mark]) do
-    moves_stream = create_input_stream(moves)
-    %Player.Human{io: {UI.Console, moves_stream}, mark: mark}
-  end
-
-  def create_human_player_with_moves([moves: moves, ui: ui]) do
-    create_human_player_with_moves(moves: moves, mark: :x, ui: ui)
-  end
-
-  def create_human_player_with_moves([ui: ui]) do
-    create_human_player_with_moves(moves: "A1\n", mark: :x, ui: ui)
-  end
-
-  def create_input_stream(lines) do
-    {:ok, input_stream} = StringIO.open(lines) 
-    input_stream
-  end
-
   def create_board([size: size, x: cross_locations, o: noughts_locations]) do
     cross_locations = subtract_one_from_all_elements(cross_locations)
     noughts_locations = subtract_one_from_all_elements(noughts_locations)
     largest_index = (size * size) - 1
     cells = Enum.map((0..largest_index), fn(_) -> :empty end)
-              |> update_multiple_nodes(cross_locations, :x) 
+              |> update_multiple_nodes(cross_locations, :x)
               |> update_multiple_nodes(noughts_locations, :o)
     %Board{cells: cells}
   end

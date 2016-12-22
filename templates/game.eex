@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Elixir TicTacToe</title>
+  </head>
+
+  <body>
+    <p>It is <%= current_player.mark %>'s turn, please pick a move</p>
+
+    <%= for cell_index <- (0..8) do %>
+      <%= if Enum.at(cells, cell_index) === :empty do %>
+        <form action="/tictactoe/moves/<%= cell_index %>" method="post"><button type="submit"></form>
+      <%= else %>
+        <%= Enum.at(cells, cell_index) %>
+      <% end %>
+    <% end %>
+
+  </body>
+
+</html>
