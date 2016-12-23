@@ -4,7 +4,7 @@ defmodule TestHelpers do
   use ExUnit.Case
 
   def move_button(move) do
-    "<button type=\"submit\" formaction=\"/tictactoe/moves/#{move}\">"
+    "/tictactoe/moves/#{move}"
   end
 
   def create_game_with_human_players(player_one_mark, player_two_mark) do

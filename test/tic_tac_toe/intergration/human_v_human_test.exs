@@ -24,7 +24,6 @@ defmodule IntegreationHumanVsHumanTest do
     assert response.resp_body =~ move_button(8)
   end
 
-@tag :wip
   test "only available moves can be made" do
     response = conn(:get, "/tictactoe/play")
       |> init_test_session(%{game_state: %Game{board: create_board([x: [1], o: []]), players: {%Player.Human{mark: :o}, %Player.Human{mark: :x}}}})
