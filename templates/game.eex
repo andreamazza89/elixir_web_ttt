@@ -4,18 +4,86 @@
   <head>
     <meta charset="utf-8">
     <title>Elixir TicTacToe</title>
+    <style>
+
+body {
+  background-color: black;
+  color: white;
+}
+
+h1 {
+  text-align: center;
+}
+
+#board {
+  background-color: #4d4d4d;
+  width: 400px;
+  height: 400px;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.row {
+  margin: auto;
+  width: 99%;
+  height: 32%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.cell {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #808080;
+  color: black;
+}
+
+.cell-mark {
+  text-align: center;
+  font-size: 50px;
+}
+
+form, button {
+    width: 100%;
+    height: 100%;
+    background-color: #808080;
+    border: none;
+    cursor: crosshair;
+    overflow: hidden;
+    outline:none;
+}
+    </style>
   </head>
 
   <body>
-    <p>It is <%= current_player.mark %>'s turn, please pick a move</p>
 
-    <%= for cell_index <- (0..8) do %>
-      <%= if Enum.at(cells, cell_index) === :empty do %>
-        <form action="/tictactoe/moves/<%= cell_index %>" method="post"><button type="submit"></form>
-      <%= else %>
-        <%= Enum.at(cells, cell_index) %>
+    <h1>It is <%= current_player.mark %>'s turn, please pick a move</h1>
+
+    <div id="board">
+      <%= for row <- rows do %>
+        <div class="row">
+          <%= for cell <- row do %>
+            <div class="cell">
+              <% {cell_mark, cell_index} = cell %>
+              <%= if cell_mark === :empty do %>
+                <form action="/tictactoe/moves/<%= cell_index %>" method="post">
+                  <button type="submit">
+                </form>
+              <%= else %>
+                <div class="cell-mark">
+                  <%= cell_mark %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
       <% end %>
-    <% end %>
+    </div>
 
   </body>
 
