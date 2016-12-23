@@ -4,45 +4,31 @@ defmodule IntegreationHumanVsHumanTest do
   import TestHelpers
   import TicTacToe.Web.GameSessionPlug
 
-  @options TicTacToe.Web.Router.init([])
-
   test "initialises the game to human v human, x to start" do
-    response = conn(:get, "/tictactoe/play")
-      |> init_test_session(%{})
-      |> TicTacToe.Web.Router.call(@options)
+    response = get_request_with_session("/tictactoe/play", %{})
 
     assert response.status === 200
     assert response.resp_body =~ "It is x's turn, please pick a move"
-    assert response.resp_body =~ move_button(0)
-    assert response.resp_body =~ move_button(1)
-    assert response.resp_body =~ move_button(2)
-    assert response.resp_body =~ move_button(3)
-    assert response.resp_body =~ move_button(4)
-    assert response.resp_body =~ move_button(5)
-    assert response.resp_body =~ move_button(6)
-    assert response.resp_body =~ move_button(7)
-    assert response.resp_body =~ move_button(8)
+    assert_response_includes_move_buttons(response, (0..8))
   end
 
-  test "only available moves can be made" do
-    response = conn(:get, "/tictactoe/play")
-      |> init_test_session(%{game_state: %Game{board: create_board([x: [1], o: []]), players: {%Player.Human{mark: :o}, %Player.Human{mark: :x}}}})
-      |> TicTacToe.Web.Router.call(@options)
+  test "only available moves can be made, board state is displayed" do
+    game = create_game_with_human_players([x: [1], o: []], {:x, :o})
+    response = get_request_with_session("/tictactoe/play", %{game_state: game})
 
     assert response.status === 200
     assert not(response.resp_body =~ move_button(0))
+    assert_response_includes_move_buttons(response, (1..8))
   end
 
   test "adds a move to the board, redirects to the play page" do
-    response = conn(:post, "/tictactoe/moves/0")
-                  |> init_test_session(%{})
-                  |> TicTacToe.Web.Router.call(@options)
+    response = post_request_with_session("/tictactoe/moves/0", %{})
     updated_game = get_game_state(response)
 
 
     assert response.status === 303
     assert get_resp_header(response, "location") === ["/tictactoe/play"]
-    assert updated_game === %Game{board: create_board(x: [1], o: []), players: {%Player.Human{mark: :o}, %Player.Human{mark: :x}}}
+    assert updated_game === create_game_with_human_players([x: [1], o: []], {:o, :x})
   end
 
 end
