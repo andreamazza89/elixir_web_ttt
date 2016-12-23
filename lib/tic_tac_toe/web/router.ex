@@ -10,6 +10,7 @@ defmodule TicTacToe.Web.Router do
                      signing_salt: "cookie store signing salt",
                      key_length: 64, log: :debug
 
+  plug Plug.Static, at: "/public", from: :elixir_web_ttt
   plug :put_secret_key_base
   plug Plug.Logger
   plug :match
