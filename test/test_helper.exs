@@ -2,15 +2,52 @@ ExUnit.start()
 
 defmodule TestHelpers do
   use ExUnit.Case
+  use Plug.Test
+
+  @options TicTacToe.Web.Router.init([])
+
+  def get_request_with_session(path, session) do
+    request_with_session(:get, path, session)
+  end
+
+  def post_request_with_session(path, session) do
+    request_with_session(:post, path, session)
+  end
+
+  defp request_with_session(method, path, session) do
+    conn(method, path)
+      |> init_test_session(session)
+      |> TicTacToe.Web.Router.call(@options)
+  end
+
+  def create_connection_with_session(session) do
+    conn(:get, "/") |> init_test_session(session)
+  end
+
+  def assert_response_includes_move_buttons(response, moves) do
+    Enum.each(moves, fn(move) ->
+      assert response.resp_body =~ move_button(move)
+    end)
+  end
 
   def move_button(move) do
     "/tictactoe/moves/#{move}"
   end
 
-  def create_game_with_human_players(player_one_mark, player_two_mark) do
-    player_one = %Player.Human{mark: player_one_mark}
-    player_two = %Player.Human{mark: player_two_mark}
-    %Game{players: {player_one, player_two}}
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^ WEB ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+#vvvvvvvvvvvvvvvvvvvvvvvvvvv CORE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+  def create_game_with_human_players(board_layout, {player_1_mark, player_2_mark}) do
+    board = create_board(board_layout)
+    player_one = %Player.Human{mark: player_1_mark}
+    player_two = %Player.Human{mark: player_2_mark}
+    %Game{players: {player_one, player_two}, board: board}
+  end
+
+  def create_game_with_human_players(player_1_mark, player_2_mark) do
+    create_game_with_human_players([x: [], o: []], {player_1_mark, player_2_mark})
   end
 
   def get_cell_at(index, game) do
