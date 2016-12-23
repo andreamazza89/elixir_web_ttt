@@ -5,12 +5,10 @@ defmodule TicTacToe.Web.Router do
 
   @secret String.duplicate("abcdef0123456789", 8)
 
-  plug Plug.Session, store: :cookie,
-                     key: "_my_app_session",
+  plug Plug.Session, store: :cookie, key: "_my_app_session",
                      encryption_salt: "cookie store encryption salt",
                      signing_salt: "cookie store signing salt",
-                     key_length: 64,
-                     log: :debug
+                     key_length: 64, log: :debug
 
   plug :put_secret_key_base
   plug Plug.Logger
@@ -25,9 +23,7 @@ defmodule TicTacToe.Web.Router do
   end
 
   post ("/tictactoe/moves/:move") do
-    conn
-      |> update_game_state_with_move(move)
-      |> redirect_to("/tictactoe/play")
+    conn |> update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
   end
 
   defp redirect_to(conn, to, message \\ "you are being redirected") do
