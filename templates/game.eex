@@ -16,14 +16,14 @@
         <div class="row">
           <%= for cell <- row do %>
             <div class="cell">
-              <% {cell_mark, cell_index} = cell %>
-              <%= if cell_mark === :empty do %>
-                <form action="/tictactoe/moves/<%= cell_index %>" method="post">
+              <% cell_presenter = TicTacToe.Web.CellPresenter %>
+              <%= if cell_presenter.is_empty?(cell) do %>
+                <form action="/tictactoe/moves/<%= cell_presenter.index(cell) %>" method="post">
                   <button type="submit">
                 </form>
               <%= else %>
                 <div class="cell-mark">
-                  <%= cell_mark %>
+                  <%= cell_presenter.mark(cell) %>
                 </div>
               <% end %>
             </div>
