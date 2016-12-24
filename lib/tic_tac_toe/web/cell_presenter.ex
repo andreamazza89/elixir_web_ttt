@@ -5,7 +5,10 @@ defmodule TicTacToe.Web.CellPresenter do
   end
 
   def mark({cell_mark, _index}) do
-    cell_mark
+    case cell_mark do
+      :empty -> ""
+      _ -> cell_mark
+    end
   end
 
   def index({_cell_mark, index}) do

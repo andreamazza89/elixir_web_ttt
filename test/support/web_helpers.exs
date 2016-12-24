@@ -10,6 +10,12 @@ defmodule WebHelpers do
     end)
   end
 
+  def assert_response_excludes_move_buttons(response, moves) do
+    Enum.each(moves, fn(move) ->
+      assert not(response.resp_body =~ move_button(move))
+    end)
+  end
+
   def move_button(move) do
     "/tictactoe/moves/#{move}"
   end

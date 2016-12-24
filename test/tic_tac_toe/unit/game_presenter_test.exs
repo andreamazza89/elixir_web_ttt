@@ -1,4 +1,4 @@
-defmodule GamePresenterTest do
+defmodule ViewManagerTest do
   use ExUnit.Case
 
   test "renders a human-v-human new game" do

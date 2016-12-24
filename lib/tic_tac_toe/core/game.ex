@@ -9,8 +9,15 @@ defmodule Game do
     end
   end
 
-  defp get_previous_player(%Game{players: {_current_player, previous_player}}) do
-    previous_player
+  def draw?(game = %Game{}) do
+    status(game) === :draw
+  end
+
+  def winner(game = %Game{}) do
+    case status(game) do
+      {:win, winner} -> winner
+      _ -> nil
+    end
   end
 
   def get_current_player(%Game{players: {current_player, _next_player}}) do
@@ -26,6 +33,10 @@ defmodule Game do
     current_player = get_current_player(game)
     cell_to_mark = Player.get_next_move(current_player, game)
     Game.mark_cell_for_current_player(game, cell_to_mark)
+  end
+
+  defp get_previous_player(%Game{players: {_current_player, previous_player}}) do
+    previous_player
   end
 
 end
