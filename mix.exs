@@ -16,7 +16,7 @@ defmodule ElixirWebTtt.Mixfile do
      mod: {TicTacToe.Web.App, []}]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/helpers"]
+  defp elixirc_paths(:test), do: ["lib", "test/fixtures"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
