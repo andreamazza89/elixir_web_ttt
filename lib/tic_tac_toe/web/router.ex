@@ -1,7 +1,7 @@
 defmodule TicTacToe.Web.Router do
   use Plug.Router
   import TicTacToe.Web.GameSessionPlug
-  import TicTacToe.Web.GamePresenter
+  import TicTacToe.Web.ViewManager
 
   @secret String.duplicate("abcdef0123456789", 8)
 

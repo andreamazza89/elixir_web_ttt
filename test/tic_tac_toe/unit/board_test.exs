@@ -119,5 +119,19 @@ defmodule BoardTest do
       assert Board.status(draw_board) === :draw
     end
 
+    test "fetches the rows, example one" do
+      board = create_board([x: [2,5,6,7,9], o: [1,4,8]])
+      assert Board.indexed_rows(board) === [[{:o, 0},{:x, 1},{:empty, 2}],
+                                            [{:o, 3},{:x, 4},{:x, 5}],
+                                            [{:x, 6},{:o, 7},{:x, 8}]]
+    end
+
+    test "fetches the rows, example two" do
+      board = create_board([x: [2,5,6,9], o: [1,4,8]])
+      assert Board.indexed_rows(board) === [[{:o, 0},{:x, 1},{:empty, 2}],
+                                            [{:o, 3},{:x, 4},{:x, 5}],
+                                            [{:empty, 6},{:o, 7},{:x, 8}]]
+    end
+
   end
 end

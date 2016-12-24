@@ -1,8 +1,7 @@
-defmodule TicTacToe.Web.GamePresenter do
+defmodule TicTacToe.Web.ViewManager do
 
   def render_game(game) do
-    board_width = Board.width(game.board)
-    rows = game.board.cells |> Enum.with_index |> Enum.chunk(board_width)
+    rows = game.board |> Board.indexed_rows
     {current_player, _next_player} = game.players
 
     EEx.eval_file("templates/game.eex", [current_player: current_player, rows: rows])
