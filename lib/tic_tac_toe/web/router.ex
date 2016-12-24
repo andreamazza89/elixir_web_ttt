@@ -18,8 +18,8 @@ defmodule TicTacToe.Web.Router do
   plug :dispatch
 
   get ("/tictactoe/play") do
-    game = get_game_state(conn)
-    response_body = render_game(game)
+    game_state = get_game_state(conn)
+    response_body = render_game(game_state)
     conn |> put_resp_content_type("html") |> send_resp(200, response_body)
   end
 

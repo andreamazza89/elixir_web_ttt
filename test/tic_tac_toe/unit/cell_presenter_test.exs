@@ -22,6 +22,11 @@ defmodule CellPresenterTest do
     assert mark(indexed_cell) === :o
   end
 
+  test "knows the cell's mark, empty example" do
+    indexed_cell = {:empty, 0}
+    assert mark(indexed_cell) === ""
+  end
+
   test "knows the cell's index, example one" do
     indexed_cell = {:x, 0}
     assert index(indexed_cell) === 0

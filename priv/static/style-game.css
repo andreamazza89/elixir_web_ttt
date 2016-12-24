@@ -3,7 +3,7 @@ body {
   color: white;
 }
 
-h1 {
+h1, h2 {
   text-align: center;
 }
 
@@ -38,6 +38,7 @@ h1 {
 .cell-mark {
   text-align: center;
   font-size: 50px;
+  font-family: fantasy;
 }
 
 form, button {

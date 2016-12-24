@@ -38,4 +38,28 @@ defmodule IntegreationHumanVsHumanTest do
     assert updated_game === create_game_with_human_players([x: [1], o: []], {:o, :x})
   end
 
+  test "announces the winner when one exists" do
+    game = create_game_with_human_players([x: [1,2,3], o: [4,5]], {:o, :x})
+    response = get_req("/tictactoe/play")
+                 |> add_session(%{game_state: game})
+                 |> call_router()
+
+    assert response.status === 200
+    assert response.resp_body =~ "x has won!"
+    assert not(response.resp_body =~ "turn")
+    assert_response_excludes_move_buttons(response, (0..8))
+  end
+
+  test "announces a draw when applicable" do
+    game = create_game_with_human_players([x: [1,2,6,7,9,], o: [3,4,5,8]], {:o, :x})
+    response = get_req("/tictactoe/play")
+                 |> add_session(%{game_state: game})
+                 |> call_router()
+
+    assert response.status === 200
+    assert response.resp_body =~ "It was a draw!"
+    assert not(response.resp_body =~ "turn")
+    assert_response_excludes_move_buttons(response, (0..8))
+  end
+
 end

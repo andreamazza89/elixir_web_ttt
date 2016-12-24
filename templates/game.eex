@@ -9,26 +9,36 @@
 
   <body>
 
-    <h1>It is <%= current_player.mark %>'s turn, please pick a move</h1>
-
     <div id="board">
       <%= for row <- rows do %>
         <div class="row">
           <%= for cell <- row do %>
             <div class="cell">
               <% cell_presenter = TicTacToe.Web.CellPresenter %>
-              <%= if cell_presenter.is_empty?(cell) do %>
-                <form action="/tictactoe/moves/<%= cell_presenter.index(cell) %>" method="post">
-                  <button type="submit">
-                </form>
-              <%= else %>
+              <%= if (winner || draw) || not(cell_presenter.is_empty?(cell)) do %>
                 <div class="cell-mark">
                   <%= cell_presenter.mark(cell) %>
                 </div>
+              <%= else %>
+                <form action="/tictactoe/moves/<%= cell_presenter.index(cell) %>" method="post">
+                  <button type="submit">
+                </form>
               <% end %>
             </div>
           <% end %>
         </div>
+      <% end %>
+    </div>
+
+
+    <div id="game-result">
+      <%= cond do %>
+      <%= winner -> %>
+        <h1><%= winner.mark %> has won!</h1>
+      <%= draw -> %>
+        <h1>It was a draw!</h1>
+      <%= true ->%>
+        <h1>It is <%= current_player.mark %>'s turn, please pick a move</h1>
       <% end %>
     </div>
 
