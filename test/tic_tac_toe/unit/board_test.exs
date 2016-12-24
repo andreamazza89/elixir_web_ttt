@@ -24,7 +24,7 @@ defmodule BoardTest do
     test "generates a 3-wide board" do
       assert Board.create_board(3) === create_board([size: 3, x: [], o: []])
     end
-    
+
     test "generates a 4-wide board" do
       assert Board.create_board(4) === create_board([size: 4, x: [], o: []])
     end
@@ -33,7 +33,7 @@ defmodule BoardTest do
 
 
   describe "board size" do
-    
+
     test "defaults to size three" do
       three_board = %Board{}
 
@@ -71,7 +71,7 @@ defmodule BoardTest do
 
   end
 
-  
+
   describe "checking the board status" do
 
     test "knows when it is empty" do
@@ -105,18 +105,32 @@ defmodule BoardTest do
     end
 
     test "a board with a winner is recognised (crosses wins diagonal example)" do
-      board_with_winner = create_board([x: [1,5,9], o: [3,4]])      
+      board_with_winner = create_board([x: [1,5,9], o: [3,4]])
       assert Board.status(board_with_winner) === {:win, :x}
     end
 
     test "a board with a winner is recognised (noughts wins)" do
-      board_with_winner = create_board([x: [4,5], o: [1,2,3]])      
+      board_with_winner = create_board([x: [4,5], o: [1,2,3]])
       assert Board.status(board_with_winner) === {:win, :o}
     end
 
     test "a draw board is recognised" do
       draw_board = create_board([x: [2,5,6,7,9], o: [1,3,4,8]])
       assert Board.status(draw_board) === :draw
+    end
+
+    test "fetches the rows, example one" do
+      board = create_board([x: [2,5,6,7,9], o: [1,4,8]])
+      assert Board.indexed_rows(board) === [[{:o, 0},{:x, 1},{:empty, 2}],
+                                            [{:o, 3},{:x, 4},{:x, 5}],
+                                            [{:x, 6},{:o, 7},{:x, 8}]]
+    end
+
+    test "fetches the rows, example two" do
+      board = create_board([x: [2,5,6,9], o: [1,4,8]])
+      assert Board.indexed_rows(board) === [[{:o, 0},{:x, 1},{:empty, 2}],
+                                            [{:o, 3},{:x, 4},{:x, 5}],
+                                            [{:empty, 6},{:o, 7},{:x, 8}]]
     end
 
   end

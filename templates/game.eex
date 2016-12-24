@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Elixir TicTacToe</title>
+    <link rel="stylesheet" type="text/css" href="/public/style-game.css">
+  </head>
+
+  <body>
+
+    <h1>It is <%= current_player.mark %>'s turn, please pick a move</h1>
+
+    <div id="board">
+      <%= for row <- rows do %>
+        <div class="row">
+          <%= for cell <- row do %>
+            <div class="cell">
+              <% cell_presenter = TicTacToe.Web.CellPresenter %>
+              <%= if cell_presenter.is_empty?(cell) do %>
+                <form action="/tictactoe/moves/<%= cell_presenter.index(cell) %>" method="post">
+                  <button type="submit">
+                </form>
+              <%= else %>
+                <div class="cell-mark">
+                  <%= cell_presenter.mark(cell) %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+  </body>
+
+</html>

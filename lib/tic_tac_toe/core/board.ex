@@ -19,12 +19,12 @@ defmodule Board do
   end
 
   def available_moves(%Board{cells: cells}) do
-    cells |> Enum.with_index |> Enum.reduce([], &add_empty_cell_to_list/2) 
+    cells |> Enum.with_index |> Enum.reduce([], &add_empty_cell_to_list/2)
   end
 
   defp add_empty_cell_to_list({cell_status, cell_index}, available_moves) do
-    if (cell_status === :empty) do 
-      List.insert_at(available_moves, -1, cell_index) 
+    if (cell_status === :empty) do
+      List.insert_at(available_moves, -1, cell_index)
     else
       available_moves
     end
@@ -43,6 +43,11 @@ defmodule Board do
 
   def empty?(board = %Board{}) do
     Enum.all?(board.cells, &(&1 === :empty))
+  end
+
+  def indexed_rows(board = %Board{}) do
+    board_width = width(board)
+    board.cells |> Enum.with_index() |> Enum.chunk(board_width)
   end
 
   defp any_winning_collection?(rows_cols_diags, mark) do
@@ -77,7 +82,7 @@ defmodule Board do
 
    defp get_diagonals(cells) do
     board_width = width(%Board{cells: cells})
-    rows = get_rows(cells) 
+    rows = get_rows(cells)
     reverse_rows = Enum.reverse(rows)
     downwards = do_get_diagonals(rows, [], board_width)
     upwards = do_get_diagonals(reverse_rows, [], board_width)
