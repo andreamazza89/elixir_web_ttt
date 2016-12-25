@@ -27,6 +27,10 @@ defmodule TicTacToe.Web.Router do
     conn |> update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
   end
 
+  post ("/tictactoe/reset_game") do
+    conn |> reset_game() |> redirect_to("/tictactoe/play")
+  end
+
   defp redirect_to(conn, to, message \\ "you are being redirected") do
     conn |> put_resp_header("location", to) |> resp(303, message)
   end
