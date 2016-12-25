@@ -20,8 +20,8 @@
                   <%= cell_presenter.mark(cell) %>
                 </div>
               <%= else %>
-                <form action="/tictactoe/moves/<%= cell_presenter.index(cell) %>" method="post">
-                  <button type="submit">
+                <form action="/tictactoe/moves/<%= cell_presenter.index(cell) %>" method="post" class="move-button">
+                  <button type="submit" class="move-button">
                 </form>
               <% end %>
             </div>
@@ -40,6 +40,11 @@
       <%= true ->%>
         <h1>It is <%= current_player.mark %>'s turn, please pick a move</h1>
       <% end %>
+        <div>
+          <form action="/tictactoe/reset_game" method="post" class="play-again-button">
+            <button type="submit" class="play-again-button">Play again?</button>
+          </form>
+        </div>
     </div>
 
   </body>

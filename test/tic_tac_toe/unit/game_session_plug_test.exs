@@ -1,8 +1,8 @@
 defmodule TicTacToe.Web.GameSessionPlugTest do
   use ExUnit.Case, async: true
-  import TestHelpers
-  import WebHelpers
   use Plug.Test
+  import WebHelpers
+  import TestHelpers
   import TicTacToe.Web.GameSessionPlug
 
   test "creates a default game for a new session" do
@@ -37,6 +37,16 @@ defmodule TicTacToe.Web.GameSessionPlugTest do
     game_state = get_game_state(conn)
 
     assert game_state.board === create_board(x: [1], o: [])
+  end
+
+  test "resets the game" do
+    game = create_game_with_human_players([x: [1], o: []], {:o, :x})
+    conn = get_req("/")
+             |> add_session(%{game_state: game})
+             |> reset_game()
+    game_state = get_game_state(conn)
+
+    assert game_state === create_game_with_human_players([x: [], o: []], {:x, :o})
   end
 
 end

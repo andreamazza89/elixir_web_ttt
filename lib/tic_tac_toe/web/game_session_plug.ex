@@ -5,7 +5,7 @@ defmodule TicTacToe.Web.GameSessionPlug do
     if session_has_game_state?(conn) do
       conn
     else
-      conn |> create_game_state!()
+      conn |> create_default_game_state!()
     end
   end
 
@@ -21,12 +21,15 @@ defmodule TicTacToe.Web.GameSessionPlug do
     conn |> set_in_session(:game_state, new_game_state)
   end
 
+  def reset_game(conn) do
+    conn |> create_default_game_state!()
+  end
 
   defp session_has_game_state?(conn) do
     get_game_state(conn) !== nil #enforcing boolean conversion
   end
 
-  defp create_game_state!(conn) do
+  defp create_default_game_state!(conn) do
     conn |> set_in_session(:game_state, %Game{})
   end
 
