@@ -1,24 +1,10 @@
 # ElixirWebTtt
 
-**TODO: Add description**
+A web implementation of my Elixir tictactoe; try not to have too much fun!
 
-## Installation
+# Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
-
-  1. Add `elixir_web_ttt` to your list of dependencies in `mix.exs`:
-
-    ```elixir
-    def deps do
-      [{:elixir_web_ttt, "~> 0.1.0"}]
-    end
-    ```
-
-  2. Ensure `elixir_web_ttt` is started before your application:
-
-    ```elixir
-    def application do
-      [applications: [:elixir_web_ttt]]
-    end
-    ```
-
+- Install Elixir/Erlang.
+- Clone this repo `git clone https://github.com/andreamazza89/elixir_web_ttt.git`
+- Move into the repo and fetch all dependencies `cd elixir_web_ttt && mix deps.get`
+- Start the server `mix run --no-halt` and visit the app at localhost:4000/tictactoe/play
