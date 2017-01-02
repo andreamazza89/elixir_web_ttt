@@ -39,4 +39,8 @@ defmodule TicTacToe.Web.Router do
     put_in conn.secret_key_base, @secret
   end
 
+  match _ do
+    conn |> send_resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
+  end
+
 end
