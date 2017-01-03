@@ -1,4 +1,4 @@
-defmodule TicTacToe.Web.ViewManager do
+defmodule TicTacToe.Web.View do
 
   def render_game(game) do
     rows = game.board |> Board.indexed_rows

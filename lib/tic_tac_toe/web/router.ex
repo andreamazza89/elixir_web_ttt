@@ -2,7 +2,7 @@ defmodule TicTacToe.Web.Router do
   use Plug.Router
   import TicTacToe.Web.GameSessionPlug
   alias TicTacToe.Web.GameSessionPlug
-  alias TicTacToe.Web.ViewManager
+  alias TicTacToe.Web.View
 
   @secret String.duplicate("abcdef0123456789", 8)
 
@@ -20,7 +20,7 @@ defmodule TicTacToe.Web.Router do
 
   get ("/tictactoe/play") do
     game_state = GameSessionPlug.get_game_state(conn)
-    response_body = ViewManager.render_game(game_state)
+    response_body = View.render_game(game_state)
     conn |> put_resp_content_type("html") |> send_resp(200, response_body)
   end
 
