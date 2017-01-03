@@ -1,5 +1,9 @@
 defmodule TicTacToe.Web.GameSessionPlug do
   use Plug.Builder
+  import GameFactory
+
+  @default_mode :human_v_human
+  @default_board_size 3
 
   def create_or_find_game(conn, _opts) do
     if session_has_game_state?(conn) do
@@ -23,6 +27,15 @@ defmodule TicTacToe.Web.GameSessionPlug do
 
   def reset_game(conn) do
     conn |> create_default_game_state!()
+  end
+
+  def create_game_state(conn, [swap_order: swap?, mode: mode, board_size: board_size]) do
+    initial_game_state = GameFactory.create_game([board_size: board_size, mode: mode, swap_order: swap?])
+    conn |> set_in_session(:game_state, initial_game_state)
+  end
+
+  def create_game_state(conn, swap_order: swap?) do
+    create_game_state(conn, [swap_order: swap?, mode: @default_mode, board_size: @default_board_size])
   end
 
   defp session_has_game_state?(conn) do

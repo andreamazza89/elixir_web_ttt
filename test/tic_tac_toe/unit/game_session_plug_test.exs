@@ -21,6 +21,15 @@ defmodule TicTacToe.Web.GameSessionPlugTest do
     assert get_session(conn, :game_state) === "existing game double"
   end
 
+  test "creates a new game with the given options (swap only)" do
+    conn = get_req("/")
+             |> add_session(%{})
+             |> create_game_state(swap_order: true)
+
+    assert get_session(conn, :game_state) ===
+      %Game{players: {%Player.Human{mark: :o}, %Player.Human{mark: :x}}}
+  end
+
   test "retrieves an existing game state" do
     conn = get_req("/")
              |> add_session(%{game_state: "existing game double"})

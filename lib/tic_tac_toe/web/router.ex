@@ -17,6 +17,10 @@ defmodule TicTacToe.Web.Router do
   plug :create_or_find_game
   plug :dispatch
 
+  get ("/tictactoe/options") do
+    conn |> put_resp_content_type("html") |> send_resp(200, "<p>Swap playing order?</p>")
+  end
+
   get ("/tictactoe/play") do
     game_state = get_game_state(conn)
     response_body = render_game(game_state)
@@ -29,6 +33,15 @@ defmodule TicTacToe.Web.Router do
 
   post ("/tictactoe/reset_game") do
     conn |> reset_game() |> redirect_to("/tictactoe/play")
+  end
+
+  post ("/tictactoe/new_game") do
+################################ this should be done outside the controller ####
+    raw_game_options = fetch_query_params(conn).query_params
+    swap? = raw_game_options["swap_order"] =~ "true"
+    game_options = [swap_order: swap?]
+################################################################################
+    conn |> create_game_state(game_options) |> redirect_to("/tictactoe/play")
   end
 
   defp redirect_to(conn, to, message \\ "you are being redirected") do
