@@ -1,7 +1,8 @@
 defmodule TicTacToe.Web.Router do
   use Plug.Router
   import TicTacToe.Web.GameSessionPlug
-  import TicTacToe.Web.ViewManager
+  alias TicTacToe.Web.GameSessionPlug
+  alias TicTacToe.Web.ViewManager
 
   @secret String.duplicate("abcdef0123456789", 8)
 
@@ -18,17 +19,21 @@ defmodule TicTacToe.Web.Router do
   plug :dispatch
 
   get ("/tictactoe/play") do
-    game_state = get_game_state(conn)
-    response_body = render_game(game_state)
+    game_state = GameSessionPlug.get_game_state(conn)
+    response_body = ViewManager.render_game(game_state)
     conn |> put_resp_content_type("html") |> send_resp(200, response_body)
   end
 
   post ("/tictactoe/moves/:move") do
-    conn |> update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
+    conn |> GameSessionPlug.update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
   end
 
   post ("/tictactoe/reset_game") do
-    conn |> reset_game() |> redirect_to("/tictactoe/play")
+    conn |> GameSessionPlug.reset_game() |> redirect_to("/tictactoe/play")
+  end
+
+  match _ do
+    conn |> send_resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
   end
 
   defp redirect_to(conn, to, message \\ "you are being redirected") do
@@ -37,10 +42,6 @@ defmodule TicTacToe.Web.Router do
 
   defp put_secret_key_base(conn, _) do
     put_in conn.secret_key_base, @secret
-  end
-
-  match _ do
-    conn |> send_resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
   end
 
 end
