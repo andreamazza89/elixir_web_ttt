@@ -16,7 +16,7 @@ defmodule TicTacToe.Web.GameSessionPlugTest do
   test "creates a new game with the given options (human_v_minimax) plus defaults" do
     conn = get_req("/")
              |> add_session(%{})
-             |> create_game_state(mode: :human_v_minimax_machine)
+             |> create_game_state_in_session(mode: :human_v_minimax_machine)
 
     players = {%Player.Human{mark: :x}, %Player.MiniMax{mark: :o}}
     board = create_board([size: 3, x: [], o: []])
@@ -26,7 +26,7 @@ defmodule TicTacToe.Web.GameSessionPlugTest do
   test "creates a new game with the given options (human_v_human) plus defaults" do
     conn = get_req("/")
              |> add_session(%{})
-             |> create_game_state(mode: :human_v_human)
+             |> create_game_state_in_session(mode: :human_v_human)
 
     players = {%Player.Human{mark: :x}, %Player.Human{mark: :o}}
     board = create_board([size: 3, x: [], o: []])
