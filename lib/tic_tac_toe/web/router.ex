@@ -39,7 +39,8 @@ defmodule TicTacToe.Web.Router do
   end
 
   post ("/tictactoe/new_game") do
-###### I wonder if creating the game options should be delegated to an Optionsparser module? ####
+###### I wonder if creating the game options should be delegated to an Optionsparser module? ##################
+###### feels like an overkill right now, but might feel the need for it if adding game-swap, board size... ####
     mode = String.to_atom(conn.body_params["mode"])
     game_options = [mode: mode]
 #################################################################################################
