@@ -11,6 +11,15 @@ defmodule TicTacToe.Web.GameSessionPlug do
     end
   end
 
+  def create_game_state(conn, mode: mode) do
+    create_game_state(conn, [board_size: 3, mode: mode, swap_order: false])
+  end
+
+  def create_game_state(conn, options) do
+    new_game = GameFactory.create_game(options)
+    conn |> set_in_session(:game_state, new_game)
+  end
+
   def get_game_state(conn) do
     get_from_session(conn, :game_state)
   end
