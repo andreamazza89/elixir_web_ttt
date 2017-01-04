@@ -1,9 +1,7 @@
 defmodule TicTacToe.Web.GameSessionPlug do
   use Plug.Builder
 
-  @default_game %Game{players: {%Player.Human{mark: :x}, %Player.MiniMax{mark: :o}}}
-#temporarily hard-coded to a human v computer game. Will remove the hardcoding
-#when introducing game selection page
+  @default_game %Game{}
 
   def create_or_find_game(conn, _opts) do
     if session_has_game_state?(conn) do

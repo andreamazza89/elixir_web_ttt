@@ -1,7 +1,7 @@
 defmodule TicTacToe.Web.CellPresenter do
 
-  def is_empty?({cell_mark, _index}) do
-    cell_mark === :empty
+  def cell_occupied?({cell_mark, _index}) do
+    cell_mark !== :empty
   end
 
   def mark({cell_mark, _index}) do

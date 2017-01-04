@@ -4,12 +4,12 @@ defmodule CellPresenterTest do
 
   test "knows if a cell is empty" do
     indexed_cell = {:empty, 0}
-    assert is_empty?(indexed_cell) === true
+    assert cell_occupied?(indexed_cell) === false
   end
 
   test "knows if a cell is not empty" do
     indexed_cell = {:x, 0}
-    assert is_empty?(indexed_cell) === false
+    assert cell_occupied?(indexed_cell) === true
   end
 
   test "knows the cell's mark, example one" do
