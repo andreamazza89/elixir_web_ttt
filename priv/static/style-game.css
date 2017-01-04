@@ -58,4 +58,5 @@ h1 {
   border-radius: 8px;
   margin: auto;
   width: 100px;
+  cursor: pointer;
 }

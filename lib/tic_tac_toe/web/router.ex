@@ -47,10 +47,6 @@ defmodule TicTacToe.Web.Router do
     conn |> create_game_state_in_session(game_options) |> redirect_to("/tictactoe/play")
   end
 
-  post ("/tictactoe/reset_game") do
-    conn |> GameSessionPlug.reset_game() |> redirect_to("/tictactoe/play")
-  end
-
   match _ do
     conn |> resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
   end
