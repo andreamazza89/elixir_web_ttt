@@ -19,9 +19,11 @@ defmodule TicTacToe.Web.Router do
   plug :dispatch
 
   get ("/tictactoe/play") do
-    game_state = GameSessionPlug.get_game_state(conn)
+    game_state = conn |> GameSessionPlug.get_game_state()
     response_body = View.render_game(game_state)
-    conn |> put_resp_content_type("html") |> send_resp(200, response_body)
+    conn |> GameSessionPlug.make_next_move()
+         |> put_resp_content_type("html")
+         |> resp(200, response_body)
   end
 
   post ("/tictactoe/moves/:move") do

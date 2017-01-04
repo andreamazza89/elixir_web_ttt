@@ -1,6 +1,8 @@
 defmodule TicTacToe.Web.GameSessionPlug do
   use Plug.Builder
 
+  @default_game %Game{}
+
   def create_or_find_game(conn, _opts) do
     if session_has_game_state?(conn) do
       conn
@@ -13,11 +15,22 @@ defmodule TicTacToe.Web.GameSessionPlug do
     get_from_session(conn, :game_state)
   end
 
+  def make_next_move(conn) do
+    game_state = get_game_state(conn)
+    current_player = Game.get_current_player(game_state)
+    unless human?(current_player) do
+      new_game_state = Game.make_next_move(game_state)
+      conn |> set_in_session(:game_state, new_game_state)
+    else
+      conn
+    end
+  end
+
   def update_game_state_with_move(conn, move) do
     move_as_integer = String.to_integer(move)
-    old_game_state = get_game_state(conn)
-    new_game_state = old_game_state |> Game.mark_cell_for_current_player(move_as_integer)
-
+    new_game_state = conn
+                       |> get_game_state()
+                       |> Game.mark_cell_for_current_player(move_as_integer)
     conn |> set_in_session(:game_state, new_game_state)
   end
 
@@ -30,7 +43,7 @@ defmodule TicTacToe.Web.GameSessionPlug do
   end
 
   defp create_default_game_state!(conn) do
-    conn |> set_in_session(:game_state, %Game{})
+    conn |> set_in_session(:game_state, @default_game)
   end
 
   defp get_from_session(conn, key) do
@@ -39,6 +52,14 @@ defmodule TicTacToe.Web.GameSessionPlug do
 
   defp set_in_session(conn, key, value) do
     conn |> fetch_session() |> put_session(key, value)
+  end
+
+  def human?(%Player.Human{}) do
+    true
+  end
+
+  def human?(_) do
+    false
   end
 
 end
