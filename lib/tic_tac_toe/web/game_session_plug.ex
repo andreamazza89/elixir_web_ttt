@@ -1,7 +1,9 @@
 defmodule TicTacToe.Web.GameSessionPlug do
   use Plug.Builder
 
-  @default_game %Game{}
+  @default_game %Game{players: {%Player.Human{mark: :x}, %Player.MiniMax{mark: :o}}}
+#temporarily hard-coded to a human v computer game. Will remove the hardcoding
+#when introducing game selection page
 
   def create_or_find_game(conn, _opts) do
     if session_has_game_state?(conn) do
@@ -16,14 +18,8 @@ defmodule TicTacToe.Web.GameSessionPlug do
   end
 
   def make_next_move(conn) do
-    game_state = get_game_state(conn)
-    current_player = Game.get_current_player(game_state)
-    unless human?(current_player) do
-      new_game_state = Game.make_next_move(game_state)
-      conn |> set_in_session(:game_state, new_game_state)
-    else
-      conn
-    end
+    new_game_state = conn |> get_game_state() |> Game.make_next_move()
+    conn |> set_in_session(:game_state, new_game_state)
   end
 
   def update_game_state_with_move(conn, move) do
@@ -52,14 +48,6 @@ defmodule TicTacToe.Web.GameSessionPlug do
 
   defp set_in_session(conn, key, value) do
     conn |> fetch_session() |> put_session(key, value)
-  end
-
-  def human?(%Player.Human{}) do
-    true
-  end
-
-  def human?(_) do
-    false
   end
 
 end

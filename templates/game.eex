@@ -3,6 +3,9 @@
 
   <head>
     <meta charset="utf-8">
+    <%= if computer_goes_next? do %>
+      <meta http-equiv="refresh" content="2;url=/tictactoe/computer_move">
+    <% end %>
     <title>Elixir TicTacToe</title>
     <link rel="stylesheet" type="text/css" href="/public/style-game.css">
   </head>

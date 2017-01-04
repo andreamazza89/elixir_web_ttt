@@ -51,17 +51,30 @@ defmodule TicTacToe.Web.GameSessionPlugTest do
     assert game_state.board === create_board(x: [1], o: [])
   end
 
-  test "does not affect the game if the current player is human" do
-    cpu_player = %Player.MiniMax{mark: :x}
-    human_player = %Player.Human{mark: :o}
-    game = %Game{players: {human_player, cpu_player}}
-    conn = get_req("/")
-             |> add_session(%{game_state: game})
-             |> make_next_move()
-    game_state = get_game_state(conn)
+  #test "does not affect the game if the current player is human" do
+  #  cpu_player = %Player.MiniMax{mark: :x}
+  #  human_player = %Player.Human{mark: :o}
+  #  game = %Game{players: {human_player, cpu_player}}
+  #  conn = get_req("/")
+  #           |> add_session(%{game_state: game})
+  #           |> make_next_move()
+  #  game_state = get_game_state(conn)
 
-    assert game_state === game
-  end
+  #  assert game_state === game
+  #end
+
+  #test "does not affect the game if the game is over" do
+  #  cpu_player = %Player.MiniMax{mark: :x}
+  #  human_player = %Player.Human{mark: :o}
+  #  board = create_board([x: [1,2,3,9], o: [4,5,7]])
+  #  game = %Game{players: {cpu_player, human_player}, board: board}
+  #  conn = get_req("/")
+  #           |> add_session(%{game_state: game})
+  #           |> make_next_move()
+  #  game_state = get_game_state(conn)
+
+  #  assert game_state === game
+  #end
 
   test "resets the game" do
     game = create_game_with_human_players([x: [1], o: []], {:o, :x})

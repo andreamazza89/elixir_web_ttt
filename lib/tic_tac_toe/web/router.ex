@@ -21,9 +21,12 @@ defmodule TicTacToe.Web.Router do
   get ("/tictactoe/play") do
     game_state = conn |> GameSessionPlug.get_game_state()
     response_body = View.render_game(game_state)
-    conn |> GameSessionPlug.make_next_move()
-         |> put_resp_content_type("html")
+    conn |> put_resp_content_type("html")
          |> resp(200, response_body)
+  end
+
+  get ("/tictactoe/computer_move") do
+    conn |> GameSessionPlug.make_next_move() |> redirect_to("/tictactoe/play")
   end
 
   post ("/tictactoe/moves/:move") do
@@ -35,7 +38,7 @@ defmodule TicTacToe.Web.Router do
   end
 
   match _ do
-    conn |> send_resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
+    conn |> resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
   end
 
   defp redirect_to(conn, to, message \\ "you are being redirected") do
