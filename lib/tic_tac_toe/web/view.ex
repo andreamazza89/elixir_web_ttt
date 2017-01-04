@@ -11,6 +11,10 @@ defmodule TicTacToe.Web.View do
                                          computer_goes_next?: computer_goes_next?(game)])
   end
 
+  def game_options do
+    EEx.eval_file("templates/game_options.eex")
+  end
+
   defp computer_goes_next?(game) do
     current_player = Game.get_current_player(game)
     game_not_over?(game) and computer_player?(current_player)

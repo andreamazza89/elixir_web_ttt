@@ -11,6 +11,7 @@ defmodule TicTacToe.Web.Router do
                      signing_salt: "cookie store signing salt",
                      key_length: 64, log: :debug
 
+  plug Plug.Parsers, parsers: [:urlencoded, :multipart]
   plug Plug.Static, at: "/public", from: :elixir_web_ttt
   plug :put_secret_key_base
   plug Plug.Logger
@@ -18,11 +19,15 @@ defmodule TicTacToe.Web.Router do
   plug :create_or_find_game
   plug :dispatch
 
+  get ("/tictactoe/options") do
+    response_body = View.game_options()
+    conn |> put_resp_content_type("html") |> resp(200, response_body)
+  end
+
   get ("/tictactoe/play") do
     game_state = conn |> GameSessionPlug.get_game_state()
     response_body = View.render_game(game_state)
-    conn |> put_resp_content_type("html")
-         |> resp(200, response_body)
+    conn |> put_resp_content_type("html") |> resp(200, response_body)
   end
 
   get ("/tictactoe/computer_move") do
@@ -31,6 +36,14 @@ defmodule TicTacToe.Web.Router do
 
   post ("/tictactoe/moves/:move") do
     conn |> GameSessionPlug.update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
+  end
+
+  post ("/tictactoe/new_game") do
+###### I wonder if creating the game options should be delegated to an Optionsparser module? ####
+    mode = String.to_atom(conn.body_params["mode"])
+    game_options = [mode: mode]
+#################################################################################################
+    conn |> create_game_state_in_session(game_options) |> redirect_to("/tictactoe/play")
   end
 
   post ("/tictactoe/reset_game") do
