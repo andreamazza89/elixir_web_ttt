@@ -3,7 +3,7 @@ defmodule TicTacToe.Web.App do
 
   def start(_type, _args) do
     port = Application.get_env(:elixir_web_ttt, :port)
-    IO.puts "Server running on port #{port}. Visit /tictactoe/options" <>
+    IO.puts "Server running on port #{port}. Visit /ttt/options" <>
       " to start a new game"
     import Supervisor.Spec, warn: false
 

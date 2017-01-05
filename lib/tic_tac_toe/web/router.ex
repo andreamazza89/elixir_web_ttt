@@ -35,12 +35,11 @@ defmodule TicTacToe.Web.Router do
   end
 
   post ("/ttt/new_game") do
-###### I wonder if creating the game options should be delegated to an Optionsparser module? ##################
+###### I wonder if creating the game options should be delegated to a GameOptionsParser module? ##################
 ###### feels like an overkill right now, but might feel the need for it if adding game-swap, board size... ####
     mode = String.to_atom(conn.body_params["mode"])
     game = GameFactory.create_game([board_size: 3, mode: mode, swap_order: false])
     stringy_game = GameStateStringifier.stringify(game)
-#################################################################################################
     conn |> redirect_to("/ttt/play/#{stringy_game}")
   end
 
