@@ -11,8 +11,24 @@ defmodule TicTacToe.Web.View do
                                          computer_goes_next?: computer_goes_next?(game)])
   end
 
+  def render_game(game, stringy_game_state) do
+    rows = game.board |> Board.indexed_rows
+    {current_player, _next_player} = game.players
+    draw? = Game.draw?(game)
+    winner = Game.winner(game)
+
+    EEx.eval_file("templates/stringy_game.eex", [current_player: current_player, rows: rows,
+                                         winner: winner, draw: draw?,
+                                         computer_goes_next?: computer_goes_next?(game),
+                                         stringy_game_state: stringy_game_state])
+  end
+
   def game_options do
     EEx.eval_file("templates/game_options.eex")
+  end
+
+  def stringified_game_options do
+    EEx.eval_file("templates/stringified_game_options.eex")
   end
 
   defp computer_goes_next?(game) do

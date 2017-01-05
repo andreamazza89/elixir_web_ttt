@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Elixir TicTacToe</title>
+    <link rel="stylesheet" type="text/css" href="/public/style-game.css">
+  </head>
+
+  <body>
+    <p>Please select a game mode</p>
+    <form action="/ttt/new_game" method="post">
+      <input type="radio" name="mode" value="human_v_minimax_machine">Human Vs Minimax<br>
+      <input type="radio" name="mode" value="human_v_human">Human Vs Human<br>
+      <input type="submit" value="Play now!">
+    </form>
+  </body>
+
+</html>
