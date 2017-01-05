@@ -1,7 +1,8 @@
 defmodule TicTacToe.Web.Router do
   use Plug.Router
   import TicTacToe.Web.GameSessionPlug
-  import TicTacToe.Web.ViewManager
+  alias TicTacToe.Web.GameSessionPlug
+  alias TicTacToe.Web.View
 
   @secret String.duplicate("abcdef0123456789", 8)
 
@@ -10,6 +11,7 @@ defmodule TicTacToe.Web.Router do
                      signing_salt: "cookie store signing salt",
                      key_length: 64, log: :debug
 
+  plug Plug.Parsers, parsers: [:urlencoded, :multipart]
   plug Plug.Static, at: "/public", from: :elixir_web_ttt
   plug :put_secret_key_base
   plug Plug.Logger
@@ -17,18 +19,36 @@ defmodule TicTacToe.Web.Router do
   plug :create_or_find_game
   plug :dispatch
 
+  get ("/tictactoe/options") do
+    response_body = View.game_options()
+    conn |> put_resp_content_type("html") |> resp(200, response_body)
+  end
+
   get ("/tictactoe/play") do
-    game_state = get_game_state(conn)
-    response_body = render_game(game_state)
-    conn |> put_resp_content_type("html") |> send_resp(200, response_body)
+    game_state = conn |> GameSessionPlug.get_game_state()
+    response_body = View.render_game(game_state)
+    conn |> put_resp_content_type("html") |> resp(200, response_body)
+  end
+
+  get ("/tictactoe/computer_move") do
+    conn |> GameSessionPlug.make_next_move() |> redirect_to("/tictactoe/play")
   end
 
   post ("/tictactoe/moves/:move") do
-    conn |> update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
+    conn |> GameSessionPlug.update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
   end
 
-  post ("/tictactoe/reset_game") do
-    conn |> reset_game() |> redirect_to("/tictactoe/play")
+  post ("/tictactoe/new_game") do
+###### I wonder if creating the game options should be delegated to an Optionsparser module? ##################
+###### feels like an overkill right now, but might feel the need for it if adding game-swap, board size... ####
+    mode = String.to_atom(conn.body_params["mode"])
+    game_options = [mode: mode]
+#################################################################################################
+    conn |> create_game_state_in_session(game_options) |> redirect_to("/tictactoe/play")
+  end
+
+  match _ do
+    conn |> resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
   end
 
   defp redirect_to(conn, to, message \\ "you are being redirected") do
@@ -37,10 +57,6 @@ defmodule TicTacToe.Web.Router do
 
   defp put_secret_key_base(conn, _) do
     put_in conn.secret_key_base, @secret
-  end
-
-  match _ do
-    conn |> send_resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
   end
 
 end

@@ -28,6 +28,10 @@ defmodule WebHelpers do
     conn(:post, path)
   end
 
+  def post_req(path, params) do
+    conn(:post, path, params)
+  end
+
   def add_session(conn, session) do
     init_test_session(conn, session)
   end
