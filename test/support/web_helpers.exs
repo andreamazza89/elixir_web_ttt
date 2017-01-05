@@ -10,10 +10,20 @@ defmodule WebHelpers do
     end)
   end
 
+  def assert_resp_includes_stringy_move_buttons(response, moves, stringy_game_state) do
+    Enum.each(moves, fn(move) ->
+      assert response.resp_body =~ stringy_move_button(move, stringy_game_state)
+    end)
+  end
+
   def assert_response_excludes_move_buttons(response, moves) do
     Enum.each(moves, fn(move) ->
       assert not(response.resp_body =~ move_button(move))
     end)
+  end
+
+  def stringy_move_button(move, stringy_game_state) do
+    "/ttt/moves/#{move}/#{stringy_game_state}"
   end
 
   def move_button(move) do

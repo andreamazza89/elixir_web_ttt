@@ -5,6 +5,15 @@ defmodule IntegrationHumanVsHumanTest do
   import TestHelpers
   import TicTacToe.Web.GameSessionPlug
 
+  test "displays the current game, with links to the available moves" do
+    {:ok, stringy_game_state} = JSON.encode(%Game{})
+    response = get_req("/ttt/play/#{stringy_game_state}") |> call_router()
+
+    assert response.status === 200
+    assert response.resp_body =~ "It is x's turn, please pick a move"
+    assert_resp_includes_stringy_move_buttons(response, (0..8), stringy_game_state)
+  end
+
   test "initialises the game to human v human, x to start" do
     response = get_req("/tictactoe/play")
                  |> add_session(%{})
