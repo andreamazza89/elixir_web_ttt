@@ -45,7 +45,7 @@ defmodule TicTacToe.Web.Router do
   end
 
   match _ do
-    conn |> resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
+    conn |> resp(404, "Oops, something went wrong, maybe try /ttt/options")
   end
 
   defp redirect_to(conn, to, message \\ "you are being redirected") do
