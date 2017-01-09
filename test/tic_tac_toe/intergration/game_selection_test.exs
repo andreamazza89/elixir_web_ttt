@@ -14,7 +14,7 @@ defmodule GameSelectionTest do
   end
 
   test "creates a new game of Human v MiniMax" do
-    response = post_req("/ttt/new_game", %{"mode"=>"human_v_minimax_machine"})
+    response = get_req("/ttt/new_game?mode=human_v_minimax_machine")
                  |> call_router()
 
     players = {%Player.Human{mark: :x}, %Player.MiniMax{mark: :o}}

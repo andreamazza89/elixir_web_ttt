@@ -24,7 +24,7 @@
                   <%= cell_presenter.mark(cell) %>
                 </div>
               <%= else %>
-                <form action='/ttt/moves/<%= cell_presenter.index(cell) %>/<%= game_state %>' method="post" class="move-button">
+                <form action='/ttt/moves/<%= cell_presenter.index(cell) %>/<%= game_state %>' method="get" class="move-button">
                   <button type="submit" class="move-button">
                 </form>
               <% end %>

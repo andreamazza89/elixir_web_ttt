@@ -27,7 +27,7 @@ defmodule IntegrationHumanVsHumanTest do
 
   test "adds a move to the board, redirects to the play page" do
     serialised_game_state = GameStateSerialiser.serialise(%Game{})
-    response = post_req("/ttt/moves/0/#{serialised_game_state}") |> call_router()
+    response = get_req("/ttt/moves/0/#{serialised_game_state}") |> call_router()
 
     updated_game = create_game_with_human_players([x: [1], o: []], {:o, :x})
     serialised_updated_game = GameStateSerialiser.serialise(updated_game)
