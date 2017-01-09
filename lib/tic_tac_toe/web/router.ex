@@ -9,6 +9,10 @@ defmodule TicTacToe.Web.Router do
   plug :match
   plug :dispatch
 
+  get ("/") do
+    conn |> redirect_to("/ttt/options")
+  end
+
   get ("/ttt/options") do
     response_body = View.stringified_game_options()
     conn |> put_resp_content_type("html") |> resp(200, response_body)
@@ -35,8 +39,6 @@ defmodule TicTacToe.Web.Router do
   end
 
   post ("/ttt/new_game") do
-###### I wonder if creating the game options should be delegated to a GameOptionsParser module? ##################
-###### feels like an overkill right now, but might feel the need for it if adding game-swap, board size... ####
     mode = String.to_atom(conn.body_params["mode"])
     game = GameFactory.create_game([board_size: 3, mode: mode, swap_order: false])
     stringy_game = GameStateStringifier.stringify(game)
