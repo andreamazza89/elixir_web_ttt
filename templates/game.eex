@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <%= if computer_goes_next? do %>
-      <meta http-equiv="refresh" content='1;url=/ttt/computer_move/<%= stringy_game_state %>'>
+      <meta http-equiv="refresh" content='1;url=/ttt/computer_move/<%= game_state %>'>
     <% end %>
     <title>Elixir TicTacToe</title>
     <link rel="stylesheet" type="text/css" href="/public/style-game.css">
@@ -24,7 +24,7 @@
                   <%= cell_presenter.mark(cell) %>
                 </div>
               <%= else %>
-                <form action='/ttt/moves/<%= cell_presenter.index(cell) %>/<%= stringy_game_state %>' method="post" class="move-button">
+                <form action='/ttt/moves/<%= cell_presenter.index(cell) %>/<%= game_state %>' method="post" class="move-button">
                   <button type="submit" class="move-button">
                 </form>
               <% end %>

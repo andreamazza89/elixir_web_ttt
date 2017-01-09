@@ -3,7 +3,7 @@ defmodule GameSelectionTest do
   use Plug.Test
   import WebHelpers
   import TestHelpers
-  alias TicTacToe.Web.GameStateStringifier
+  alias TicTacToe.Web.GameStateSerialiser
 
   test "shows the available game options" do
     response = get_req("/ttt/options")
@@ -20,10 +20,10 @@ defmodule GameSelectionTest do
     players = {%Player.Human{mark: :x}, %Player.MiniMax{mark: :o}}
     board = create_board([size: 3, x: [], o: []])
     game = %Game{players: players, board: board}
-    stringy_game = GameStateStringifier.stringify(game)
+    serialised_game = GameStateSerialiser.serialise(game)
 
     assert response.status === 303
-    assert get_resp_header(response, "location") === ["/ttt/play/#{stringy_game}"]
+    assert get_resp_header(response, "location") === ["/ttt/play/#{serialised_game}"]
   end
 
 end

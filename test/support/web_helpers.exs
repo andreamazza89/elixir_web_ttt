@@ -10,9 +10,9 @@ defmodule WebHelpers do
     end)
   end
 
-  def assert_resp_includes_stringy_move_buttons(response, moves, stringy_game_state) do
+  def assert_resp_includes_serialised_move_buttons(response, moves, serialised_game_state) do
     Enum.each(moves, fn(move) ->
-      assert response.resp_body =~ stringy_move_button(move, stringy_game_state)
+      assert response.resp_body =~ serialised_move_button(move, serialised_game_state)
     end)
   end
 
@@ -22,8 +22,8 @@ defmodule WebHelpers do
     end)
   end
 
-  def stringy_move_button(move, stringy_game_state) do
-    "/ttt/moves/#{move}/#{stringy_game_state}"
+  def serialised_move_button(move, serialised_game_state) do
+    "/ttt/moves/#{move}/#{serialised_game_state}"
   end
 
   def move_button(move) do
