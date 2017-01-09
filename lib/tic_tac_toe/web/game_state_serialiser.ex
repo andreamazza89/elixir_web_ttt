@@ -1,12 +1,12 @@
 defmodule TicTacToe.Web.GameStateSerialiser do
 
-  @separator ","
-  @game_parsing_regex ~r{Board=(?<board>[^-]+)-Players=(?<players>.+)}
+  @separator "-"
+  @game_parsing_regex ~r{Board=(?<board>[^_]+)_Players=(?<players>.+)}
 
   def serialise(game) do
     serialised_players = serialise_players(game.players)
     serialised_board = serialise_board(game.board)
-    "Board=" <> serialised_board <> "-Players=" <> serialised_players
+    "Board=" <> serialised_board <> "_Players=" <> serialised_players
   end
 
   def parse(serialised_game) do
