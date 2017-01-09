@@ -23,7 +23,7 @@ defmodule ElixirWebTtt.Mixfile do
     [
       {:cowboy, "~> 1.0.0"},
       {:plug, "~> 1.0"},
-      {:json, "~> 1.0"},
+      {:elixir_tictactoe, "== 0.3.2"},
       {:mix_test_watch, "~> 0.2", only: :dev}
     ]
   end
