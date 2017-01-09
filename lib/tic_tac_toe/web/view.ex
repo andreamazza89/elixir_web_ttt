@@ -1,6 +1,6 @@
 defmodule TicTacToe.Web.View do
 
-  def render_game(game) do
+  def render_game(game, serialised_game_state) do
     rows = game.board |> Board.indexed_rows
     {current_player, _next_player} = game.players
     draw? = Game.draw?(game)
@@ -8,7 +8,8 @@ defmodule TicTacToe.Web.View do
 
     EEx.eval_file("templates/game.eex", [current_player: current_player, rows: rows,
                                          winner: winner, draw: draw?,
-                                         computer_goes_next?: computer_goes_next?(game)])
+                                         computer_goes_next?: computer_goes_next?(game),
+                                         game_state: serialised_game_state])
   end
 
   def game_options do

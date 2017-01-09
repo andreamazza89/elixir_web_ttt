@@ -1,62 +1,56 @@
 defmodule TicTacToe.Web.Router do
   use Plug.Router
-  import TicTacToe.Web.GameSessionPlug
-  alias TicTacToe.Web.GameSessionPlug
+  alias TicTacToe.Web.GameStateSerialiser
   alias TicTacToe.Web.View
 
-  @secret String.duplicate("abcdef0123456789", 8)
-
-  plug Plug.Session, store: :cookie, key: "_my_app_session",
-                     encryption_salt: "cookie store encryption salt",
-                     signing_salt: "cookie store signing salt",
-                     key_length: 64, log: :debug
-
-  plug Plug.Parsers, parsers: [:urlencoded, :multipart]
   plug Plug.Static, at: "/public", from: :elixir_web_ttt
-  plug :put_secret_key_base
   plug Plug.Logger
   plug :match
-  plug :create_or_find_game
   plug :dispatch
 
-  get ("/tictactoe/options") do
+  get ("/") do
+    conn |> redirect_to("/ttt/options")
+  end
+
+  get ("/ttt/options") do
     response_body = View.game_options()
     conn |> put_resp_content_type("html") |> resp(200, response_body)
   end
 
-  get ("/tictactoe/play") do
-    game_state = conn |> GameSessionPlug.get_game_state()
-    response_body = View.render_game(game_state)
+  get ("ttt/play/:serialised_game_state") do
+    game_state = GameStateSerialiser.parse(serialised_game_state)
+    response_body = View.render_game(game_state, serialised_game_state)
     conn |> put_resp_content_type("html") |> resp(200, response_body)
   end
 
-  get ("/tictactoe/computer_move") do
-    conn |> GameSessionPlug.make_next_move() |> redirect_to("/tictactoe/play")
+  get ("/ttt/computer_move/:serialised_game_state") do
+    old_game_state = GameStateSerialiser.parse(serialised_game_state)
+    new_game_state = Game.make_next_move(old_game_state)
+    serialised_new_game_state = GameStateSerialiser.serialise(new_game_state)
+    conn |> redirect_to("/ttt/play/#{serialised_new_game_state}")
   end
 
-  post ("/tictactoe/moves/:move") do
-    conn |> GameSessionPlug.update_game_state_with_move(move) |> redirect_to("/tictactoe/play")
+  get ("/ttt/moves/:move/:serialised_game_state") do
+    old_game_state = GameStateSerialiser.parse(serialised_game_state)
+    new_game_state = Game.mark_cell_for_current_player(old_game_state, String.to_integer(move))
+    serialised_new_game_state = GameStateSerialiser.serialise(new_game_state)
+    conn |> redirect_to("/ttt/play/#{serialised_new_game_state}")
   end
 
-  post ("/tictactoe/new_game") do
-###### I wonder if creating the game options should be delegated to an Optionsparser module? ##################
-###### feels like an overkill right now, but might feel the need for it if adding game-swap, board size... ####
-    mode = String.to_atom(conn.body_params["mode"])
-    game_options = [mode: mode]
-#################################################################################################
-    conn |> create_game_state_in_session(game_options) |> redirect_to("/tictactoe/play")
+  get ("/ttt/new_game") do
+    conn_with_params = conn |> fetch_query_params
+    mode = conn_with_params.params["mode"] |> String.to_atom()
+    game = GameFactory.create_game([board_size: 3, mode: mode, swap_order: false])
+    serialised_game = GameStateSerialiser.serialise(game)
+    conn |> redirect_to("/ttt/play/#{serialised_game}")
   end
 
   match _ do
-    conn |> resp(404, "Oops, something went wrong, maybe try /tictactoe/play")
+    conn |> resp(404, "Oops, something went wrong, maybe try /ttt/options")
   end
 
   defp redirect_to(conn, to, message \\ "you are being redirected") do
     conn |> put_resp_header("location", to) |> resp(303, message)
-  end
-
-  defp put_secret_key_base(conn, _) do
-    put_in conn.secret_key_base, @secret
   end
 
 end

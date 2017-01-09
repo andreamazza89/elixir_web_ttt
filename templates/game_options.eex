@@ -9,7 +9,7 @@
 
   <body>
     <p>Please select a game mode</p>
-    <form action="/tictactoe/new_game" method="post">
+    <form action="/ttt/new_game" method="get">
       <input type="radio" name="mode" value="human_v_minimax_machine">Human Vs Minimax<br>
       <input type="radio" name="mode" value="human_v_human">Human Vs Human<br>
       <input type="submit" value="Play now!">
